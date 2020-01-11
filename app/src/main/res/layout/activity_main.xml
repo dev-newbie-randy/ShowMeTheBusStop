@@ -18,6 +18,7 @@
         android:focusableInTouchMode="true"
         android:layout_weight="1"
         android:layout_gravity="end"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         tools:listitem="@layout/item_row"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

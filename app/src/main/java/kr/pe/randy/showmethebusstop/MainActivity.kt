@@ -15,8 +15,7 @@ import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import org.json.XML
-
+import fr.arnaudguyon.xmltojsonlib.XmlToJson
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
@@ -30,7 +29,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private val busStopList = mutableListOf<BusStationData>()
 
     private val volleyListener = Response.Listener<String> { response ->
-        val receivedJSon = XML.toJSONObject(response)
+        val receivedJSon = XmlToJson.Builder(response).build().toJson()!!
         val responseJSon = receivedJSon.getJSONObject("response")
         val msgBodyJSon = responseJSon.getJSONObject("msgBody")
         val busStationListJson = msgBodyJSon.getJSONArray("busStationList")
