@@ -5,6 +5,7 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/ShowMeTheBusStop.iml" filepath="$PROJECT_DIR$/.idea/ShowMeTheBusStop.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/ShowMeTheBusStop-app.iml" filepath="$PROJECT_DIR$/app/ShowMeTheBusStop-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/workspace_git-ShowMeTheBusStop-app.iml" filepath="$PROJECT_DIR$/app/workspace_git-ShowMeTheBusStop-app.iml" />
     </modules>
   </component>
 </project>
