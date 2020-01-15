@@ -48,8 +48,6 @@ class BusStationFragment : Fragment() {
     }
 
     private fun onBusStationClick(data: BusStationData) {
-        if (activity is MainActivity) {
-            (activity as MainActivity).handleSelectedBusStation(data)
-        }
+        (activity as? MainActivity)?.handleSelectedBusStation(data)
     }
 }

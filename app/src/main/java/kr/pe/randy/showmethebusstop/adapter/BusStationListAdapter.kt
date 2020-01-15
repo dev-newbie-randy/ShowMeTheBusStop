@@ -26,9 +26,11 @@ class BusStationListAdapter
         }
 
         fun bind(data: BusStationData) {
-            busStationName.text = data.stationName
-            busStationId.text = data.mobileNo
-            region.text = data.regionName
+            with(data) {
+                busStationName.text = stationName
+                busStationId.text = mobileNo
+                region.text = regionName
+            }
         }
     }
 
