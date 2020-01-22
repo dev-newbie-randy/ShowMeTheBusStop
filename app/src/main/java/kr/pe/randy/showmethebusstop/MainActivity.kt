@@ -74,7 +74,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String): Boolean {
         prepareSearch()
-        sendHttpPostRetroFit(query)
+        //sendHttpPostRetroFit(query)
+        stationFragment?.searchStation(query)
         return false
     }
 

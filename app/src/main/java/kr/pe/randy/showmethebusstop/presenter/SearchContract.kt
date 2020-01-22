@@ -9,6 +9,11 @@ interface SearchContract {
     }
 
     interface Presenter : BasePresenter<View> {
-        fun getStationList()
+        fun getStationList(keyword: String)
+    }
+
+    interface Listener {
+        fun onSuccess(list: List<BusStation>)
+        fun onFail(msg: String)
     }
 }
