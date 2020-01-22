@@ -1,6 +1,6 @@
 package kr.pe.randy.showmethebusstop.data
 
-class BusRouteData(
+data class BusRouteData(
     val staOrder: Int = 0,
     val routeId: String = "",
     val districtCd: Int = 0,

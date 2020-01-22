@@ -1,40 +1,11 @@
 package kr.pe.randy.showmethebusstop.network
 
 import kr.pe.randy.showmethebusstop.data.BusRouteData
-import kr.pe.randy.showmethebusstop.data.BusStationData
 import org.json.JSONArray
 import org.json.JSONObject
 
 class Parser {
     companion object {
-        fun getBusStationList(busStationListJson: JSONArray): MutableList<BusStationData> {
-            val busStopList = mutableListOf<BusStationData>()
-
-            val length = busStationListJson.length() - 1
-
-            for (i in 0..length) {
-                val busStationJson = busStationListJson.getJSONObject(i)
-
-                val busStopData = BusStationData(
-                    busStationJson.optString("centerYn"),
-                    busStationJson.optInt("districtCd"),
-                    convertId(
-                        busStationJson.optString(
-                            "mobileNo"
-                        )
-                    ),
-                    busStationJson.optString("regionName"),
-                    busStationJson.optString("stationId"),
-                    busStationJson.optString("stationName"),
-                    busStationJson.optDouble("x"),
-                    busStationJson.optDouble("y")
-                )
-
-                busStopList.add(busStopData)
-            }
-            return busStopList
-        }
-
         fun getBusRouteList(busRouteListJson: JSONArray): MutableList<BusRouteData> {
             val busRouteList = mutableListOf<BusRouteData>()
 
@@ -75,7 +46,7 @@ class Parser {
             return busRouteList
         }
 
-        private fun convertId(rawId: String): String {
+        fun convertId(rawId: String): String {
             val id = rawId.trim()
             if (id.isNotEmpty()) {
                 val builder = StringBuilder(id.substring(0, 2))

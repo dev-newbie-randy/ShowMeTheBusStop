@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.adapter.BusStationListAdapter
-import kr.pe.randy.showmethebusstop.data.BusStationData
+import kr.pe.randy.showmethebusstop.network.BusStation
 
 class BusStationFragment : Fragment() {
 
@@ -33,21 +33,21 @@ class BusStationFragment : Fragment() {
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
 
-        noResultView = view.findViewById<TextView>(R.id.no_result)
+        noResultView = view.findViewById(R.id.no_result)
     }
 
     fun clearNoResult() {
         noResultView.visibility = View.GONE
     }
 
-    fun bindList(list: List<BusStationData>) {
+    fun bindList(list: List<BusStation>) {
         if (list.isEmpty()) {
             noResultView.visibility = View.VISIBLE
         }
         (recyclerView.adapter as BusStationListAdapter).setEntries(list)
     }
 
-    private fun onBusStationClick(data: BusStationData) {
+    private fun onBusStationClick(data: BusStation) {
         (activity as? MainActivity)?.handleSelectedBusStation(data)
     }
 }
