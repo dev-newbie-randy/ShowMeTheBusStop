@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.data
+package kr.pe.randy.showmethebusstop.model
 
 data class BusRouteData(
     val staOrder: Int = 0,

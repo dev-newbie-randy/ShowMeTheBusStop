@@ -1,6 +1,5 @@
-package kr.pe.randy.showmethebusstop.network
+package kr.pe.randy.showmethebusstop.model
 
-import kr.pe.randy.showmethebusstop.data.BusRouteData
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -14,15 +13,16 @@ class Parser {
             for (i in 0..length) {
                 val busRouteJson = busRouteListJson.getJSONObject(i)
 
-                val busRouteData = BusRouteData(
-                    busRouteJson.optInt("staOrder"),
-                    busRouteJson.optString("routeId"),
-                    busRouteJson.optInt("districtCd"),
-                    busRouteJson.optString("regionName"),
-                    busRouteJson.optString("routeTypeName"),
-                    busRouteJson.optString("routeTypeCd"),
-                    busRouteJson.optString("routeName")
-                )
+                val busRouteData =
+                    BusRouteData(
+                        busRouteJson.optInt("staOrder"),
+                        busRouteJson.optString("routeId"),
+                        busRouteJson.optInt("districtCd"),
+                        busRouteJson.optString("regionName"),
+                        busRouteJson.optString("routeTypeName"),
+                        busRouteJson.optString("routeTypeCd"),
+                        busRouteJson.optString("routeName")
+                    )
 
                 busRouteList.add(busRouteData)
             }

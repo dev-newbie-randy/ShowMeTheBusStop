@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.network
+package kr.pe.randy.showmethebusstop.model
 
 import retrofit2.Call
 import retrofit2.http.GET

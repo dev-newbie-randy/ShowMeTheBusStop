@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.fragment
+package kr.pe.randy.showmethebusstop.view
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.adapter.BusRouteListAdapter
-import kr.pe.randy.showmethebusstop.data.BusRouteData
+import kr.pe.randy.showmethebusstop.model.BusRouteData
+import kr.pe.randy.showmethebusstop.presenter.BusRouteListAdapter
 
 class BusRouteFragment : Fragment() {
 
@@ -23,7 +23,8 @@ class BusRouteFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
-            adapter = BusRouteListAdapter().apply {
+            adapter = BusRouteListAdapter()
+                .apply {
                 onItemClick = {
                     onBusRouteClick(it)
                 }

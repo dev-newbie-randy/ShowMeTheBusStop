@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.adapter
+package kr.pe.randy.showmethebusstop.presenter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.data.BusRouteData
+import kr.pe.randy.showmethebusstop.model.BusRouteData
 
 class BusRouteListAdapter
     : RecyclerView.Adapter<BusRouteListAdapter.BusRouteViewHolder>() {

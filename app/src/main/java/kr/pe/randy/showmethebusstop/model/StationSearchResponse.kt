@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.network
+package kr.pe.randy.showmethebusstop.model
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList

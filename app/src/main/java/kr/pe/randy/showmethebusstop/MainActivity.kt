@@ -16,9 +16,9 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import fr.arnaudguyon.xmltojsonlib.XmlToJson
-import kr.pe.randy.showmethebusstop.fragment.BusRouteFragment
-import kr.pe.randy.showmethebusstop.fragment.BusStationFragment
-import kr.pe.randy.showmethebusstop.network.*
+import kr.pe.randy.showmethebusstop.model.*
+import kr.pe.randy.showmethebusstop.view.BusRouteFragment
+import kr.pe.randy.showmethebusstop.view.BusStationFragment
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -170,7 +170,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private fun showBusStationFragment() {
         supportFragmentManager.commit(true) {
             stationFragment ?: run {
-                stationFragment = BusStationFragment()
+                stationFragment =
+                    BusStationFragment()
             }
             replace(R.id.fragment_container, stationFragment!!, BusStationFragment::javaClass.name)
         }
@@ -179,7 +180,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private fun showBusRouteFragment() {
         supportFragmentManager.commit(true) {
             routeFragment ?: run {
-                routeFragment = BusRouteFragment()
+                routeFragment =
+                    BusRouteFragment()
             }
             replace(R.id.fragment_container, routeFragment!!, BusRouteFragment::javaClass.name)
         }
