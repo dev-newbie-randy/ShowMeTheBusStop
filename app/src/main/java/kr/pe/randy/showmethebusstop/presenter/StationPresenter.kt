@@ -3,10 +3,10 @@ package kr.pe.randy.showmethebusstop.presenter
 import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.model.StationApi
 
-class SearchPresenter : SearchContract.Presenter, SearchContract.Listener {
-    private var searchView : SearchContract.View? = null
+class StationPresenter : StationContract.Presenter, StationContract.Listener {
+    private var searchView : StationContract.View? = null
 
-    override fun takeView(view: SearchContract.View) {
+    override fun takeView(view: StationContract.View) {
         searchView = view
     }
 

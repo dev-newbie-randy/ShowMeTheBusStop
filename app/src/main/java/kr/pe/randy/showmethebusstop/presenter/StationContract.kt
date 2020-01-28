@@ -2,7 +2,7 @@ package kr.pe.randy.showmethebusstop.presenter
 
 import kr.pe.randy.showmethebusstop.model.BusStation
 
-interface SearchContract {
+interface StationContract {
 
     interface View : BaseView {
         fun showStationList(stationList : List<BusStation>)

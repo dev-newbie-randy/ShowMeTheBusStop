@@ -1,10 +1,33 @@
 package kr.pe.randy.showmethebusstop.model
 
+import androidx.annotation.NonNull
+import fr.arnaudguyon.xmltojsonlib.XmlToJson
 import org.json.JSONArray
 import org.json.JSONObject
 
 object RouteParser {
-    fun getBusRouteList(busRouteListJson: JSONArray): MutableList<RouteData> {
+
+    fun parseResponse(@NonNull response: String) : MutableList<RouteData> {
+        val receivedJSon = XmlToJson.Builder(response).build().toJson()!!
+        val responseJSon = receivedJSon.getJSONObject("response")
+        val msgBodyJSon = responseJSon.optJSONObject("msgBody")
+
+        msgBodyJSon ?: run {
+            return mutableListOf()
+        }
+
+        msgBodyJSon.optJSONArray("busRouteList")?.let {
+            return getBusRouteList(it)
+        } ?: run {
+            msgBodyJSon.optJSONObject("busRouteList")?.let {
+                return getBusRouteList(it)
+            }
+        }
+
+        return mutableListOf()
+    }
+
+    private fun getBusRouteList(busRouteListJson: JSONArray): MutableList<RouteData> {
         val busRouteList = mutableListOf<RouteData>()
 
         val length = busRouteListJson.length() - 1
@@ -28,7 +51,7 @@ object RouteParser {
         return busRouteList
     }
 
-    fun getBusRouteList(busRouteJson: JSONObject): MutableList<RouteData> {
+    private fun getBusRouteList(busRouteJson: JSONObject): MutableList<RouteData> {
         val busRouteList = mutableListOf<RouteData>()
 
         val busRouteData = RouteData(
@@ -44,15 +67,15 @@ object RouteParser {
         busRouteList.add(busRouteData)
         return busRouteList
     }
-
-    fun convertId(rawId: String): String {
-        val id = rawId.trim()
-        if (id.isNotEmpty()) {
-            val builder = StringBuilder(id.substring(0, 2))
-            builder.append("-")
-            builder.append(id.substring(2, id.length))
-            return builder.toString()
-        }
-        return id
-    }
+//
+//    fun convertId(rawId: String): String {
+//        val id = rawId.trim()
+//        if (id.isNotEmpty()) {
+//            val builder = StringBuilder(id.substring(0, 2))
+//            builder.append("-")
+//            builder.append(id.substring(2, id.length))
+//            return builder.toString()
+//        }
+//        return id
+//    }
 }

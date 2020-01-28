@@ -13,14 +13,14 @@ import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.presenter.BusStationListAdapter
-import kr.pe.randy.showmethebusstop.presenter.SearchContract
-import kr.pe.randy.showmethebusstop.presenter.SearchPresenter
+import kr.pe.randy.showmethebusstop.presenter.StationContract
+import kr.pe.randy.showmethebusstop.presenter.StationPresenter
 
-class BusStationFragment : Fragment(), SearchContract.View {
+class BusStationFragment : Fragment(), StationContract.View {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var noResultView: TextView
-    private lateinit var searchPresenter: SearchPresenter
+    private lateinit var searchPresenter: StationPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return LayoutInflater.from(context).inflate(R.layout.fragment_station, container, false)
@@ -43,7 +43,7 @@ class BusStationFragment : Fragment(), SearchContract.View {
     }
 
     private fun initPresenter() {
-        searchPresenter = SearchPresenter()
+        searchPresenter = StationPresenter()
         searchPresenter.takeView(this)
     }
 
@@ -66,13 +66,6 @@ class BusStationFragment : Fragment(), SearchContract.View {
 
     fun clearNoResult() {
         noResultView.visibility = View.GONE
-    }
-
-    fun bindList(list: List<BusStation>) {
-        if (list.isEmpty()) {
-            noResultView.visibility = View.VISIBLE
-        }
-        (recyclerView.adapter as BusStationListAdapter).setEntries(list)
     }
 
     private fun onBusStationClick(data: BusStation) {

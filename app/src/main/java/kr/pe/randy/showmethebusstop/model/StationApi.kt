@@ -1,7 +1,7 @@
 package kr.pe.randy.showmethebusstop.model
 
 import androidx.annotation.NonNull
-import kr.pe.randy.showmethebusstop.presenter.SearchContract
+import kr.pe.randy.showmethebusstop.presenter.StationContract
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -24,7 +24,7 @@ object StationApi {
         ): Call<StationSearchResponse>
     }
 
-    fun searchBusStation(@NonNull keyword: String, @NonNull listener: SearchContract.Listener) {
+    fun searchBusStation(@NonNull keyword: String, @NonNull listener: StationContract.Listener) {
         try {
             val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
