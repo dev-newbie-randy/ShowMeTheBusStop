@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.model.BusRouteData
+import kr.pe.randy.showmethebusstop.model.RouteData
 import kr.pe.randy.showmethebusstop.presenter.BusRouteListAdapter
 
 class BusRouteFragment : Fragment() {
@@ -33,11 +33,11 @@ class BusRouteFragment : Fragment() {
         }
     }
 
-    fun bindList(list: List<BusRouteData>) {
+    fun bindList(list: List<RouteData>) {
         (recyclerView.adapter as BusRouteListAdapter).setEntries(list)
     }
 
-    private fun onBusRouteClick(data: BusRouteData) {
+    private fun onBusRouteClick(data: RouteData) {
         Toast.makeText(activity, data.routeId, Toast.LENGTH_SHORT).show()
     }
 }

@@ -47,8 +47,8 @@ class BusStationFragment : Fragment(), SearchContract.View {
         searchPresenter.takeView(this)
     }
 
-    fun searchStation(ketword: String) {
-        searchPresenter.getStationList(ketword)
+    fun searchStation(keyword: String) {
+        searchPresenter.getStationList(keyword)
     }
 
     // SearchContract.View

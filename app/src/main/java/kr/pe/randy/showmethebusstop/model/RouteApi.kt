@@ -2,18 +2,7 @@ package kr.pe.randy.showmethebusstop.model
 
 import androidx.annotation.NonNull
 
-object Request {
-
-    fun getBusStationListUrl(@NonNull key: String, @NonNull keyword: String) : String {
-        val urlBuilder = StringBuilder("http://openapi.gbis.go.kr/ws/rest/busstationservice")
-        urlBuilder.append("?")
-        urlBuilder.append("serviceKey=")
-        urlBuilder.append(key)
-        urlBuilder.append("&")
-        urlBuilder.append("keyword=")
-        urlBuilder.append(keyword)
-        return urlBuilder.toString()
-    }
+object RouteApi {
 
     fun getBusListUrl(@NonNull key: String, @NonNull busStationId: String) : String {
         val urlBuilder = StringBuilder("http://openapi.gbis.go.kr/ws/rest/busstationservice/route")

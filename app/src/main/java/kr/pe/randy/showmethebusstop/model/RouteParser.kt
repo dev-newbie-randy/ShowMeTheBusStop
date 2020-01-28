@@ -3,9 +3,9 @@ package kr.pe.randy.showmethebusstop.model
 import org.json.JSONArray
 import org.json.JSONObject
 
-object Parser {
-    fun getBusRouteList(busRouteListJson: JSONArray): MutableList<BusRouteData> {
-        val busRouteList = mutableListOf<BusRouteData>()
+object RouteParser {
+    fun getBusRouteList(busRouteListJson: JSONArray): MutableList<RouteData> {
+        val busRouteList = mutableListOf<RouteData>()
 
         val length = busRouteListJson.length() - 1
 
@@ -13,7 +13,7 @@ object Parser {
             val busRouteJson = busRouteListJson.getJSONObject(i)
 
             val busRouteData =
-                BusRouteData(
+                RouteData(
                     busRouteJson.optInt("staOrder"),
                     busRouteJson.optString("routeId"),
                     busRouteJson.optInt("districtCd"),
@@ -28,10 +28,10 @@ object Parser {
         return busRouteList
     }
 
-    fun getBusRouteList(busRouteJson: JSONObject): MutableList<BusRouteData> {
-        val busRouteList = mutableListOf<BusRouteData>()
+    fun getBusRouteList(busRouteJson: JSONObject): MutableList<RouteData> {
+        val busRouteList = mutableListOf<RouteData>()
 
-        val busRouteData = BusRouteData(
+        val busRouteData = RouteData(
             busRouteJson.optInt("staOrder"),
             busRouteJson.optString("routeId"),
             busRouteJson.optInt("districtCd"),

@@ -8,10 +8,21 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Retrofit
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 
-object BusStationApi {
+object StationApi {
     // https://github.com/android/architecture-samples/tree/todo-mvp
     private const val KEY = "nHrki1yF4qXM1qaWVblXRlklor8rIGkROo1%2F2MegDQES28pGzF4ByMe%2BQud%2FvEnmfg2NF3mldeHq60KO5wBeEA%3D%3D"
+
+
+    interface StationSearchService {
+        @GET("/ws/rest/busstationservice")
+        fun setSearchParam(
+            @Query("serviceKey", encoded = true) key: String,
+            @Query("keyword", encoded = false) keyword: String
+        ): Call<StationSearchResponse>
+    }
 
     fun searchBusStation(@NonNull keyword: String, @NonNull listener: SearchContract.Listener) {
         try {

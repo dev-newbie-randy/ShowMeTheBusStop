@@ -16,15 +16,11 @@ import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import fr.arnaudguyon.xmltojsonlib.XmlToJson
-import kr.pe.randy.showmethebusstop.model.*
+import kr.pe.randy.showmethebusstop.model.BusStation
+import kr.pe.randy.showmethebusstop.model.RouteApi
+import kr.pe.randy.showmethebusstop.model.RouteParser
 import kr.pe.randy.showmethebusstop.view.BusRouteFragment
 import kr.pe.randy.showmethebusstop.view.BusStationFragment
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Retrofit
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private val key by lazy {
@@ -74,7 +70,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String): Boolean {
         prepareSearch()
-        //sendHttpPostRetroFit(query)
         stationFragment?.searchStation(query)
         return false
     }
@@ -91,48 +86,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             requestQueue.add(it)
         }
     }
-
-    // 버스 정류장 검색은 retrofit 으로 하고
-    private fun sendHttpPostRetroFit(@NonNull keyword: String) {
-        try {
-            val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            }).build()
-
-            val retrofit = Retrofit.Builder()
-                .baseUrl("http://openapi.gbis.go.kr")
-                .addConverterFactory(SimpleXmlConverterFactory.create())
-                .client(client)
-                .build()
-
-            val service = retrofit.create(StationSearchService::class.java)
-            val call = service.setSearchParam(key, keyword)
-
-            call.enqueue(object : Callback<StationSearchResponse> {
-                override fun onResponse(call: Call<StationSearchResponse>,
-                                        response: retrofit2.Response<StationSearchResponse>) {
-                    if (response.isSuccessful) {
-                        response.body()?.let {
-                            it.msgBody?.let { msgBody ->
-                                supportFragmentManager.fragments[0].takeIf { fragment ->
-                                    fragment is BusStationFragment
-                                }?.run {
-                                    (this as BusStationFragment).bindList(msgBody.busStationList.toList())
-                                }
-                            }
-                        }
-                    }
-                }
-
-                override fun onFailure(call: Call<StationSearchResponse>, t: Throwable) {
-                    Toast.makeText(this@MainActivity, t.message, Toast.LENGTH_SHORT).show()
-                }
-            })
-        } catch (e: Exception) {
-            Toast.makeText(this@MainActivity, e.message, Toast.LENGTH_SHORT).show()
-        }
-    }
-
 
     private fun parseResponse(@NonNull response: String) {
         val receivedJSon = XmlToJson.Builder(response).build().toJson()!!
@@ -155,14 +108,14 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             supportFragmentManager.fragments[0].takeIf { fragment ->
                 fragment is BusRouteFragment
             }?.run {
-                (this as BusRouteFragment).bindList(Parser.getBusRouteList(it))
+                (this as BusRouteFragment).bindList(RouteParser.getBusRouteList(it))
             }
         } ?: run {
             msgBodyJSon.optJSONObject("busRouteList")?.let {
                 supportFragmentManager.fragments[0].takeIf { fragment ->
                     fragment is BusRouteFragment
                 }?.run {
-                    (this as BusRouteFragment).bindList(Parser.getBusRouteList(it))
+                    (this as BusRouteFragment).bindList(RouteParser.getBusRouteList(it))
                 }
             }
         }
@@ -200,6 +153,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     fun handleSelectedBusStation(busStation: BusStation) {
         Toast.makeText(this, busStation.stationName + " " + busStation.stationId, Toast.LENGTH_SHORT).show()
         showBusRouteFragment()
-        sendHttpRequest(Request.getBusListUrl(key, busStation.stationId))
+        sendHttpRequest(RouteApi.getBusListUrl(key, busStation.stationId))
     }
 }

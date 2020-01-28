@@ -1,7 +1,7 @@
 package kr.pe.randy.showmethebusstop.presenter
 
 import kr.pe.randy.showmethebusstop.model.BusStation
-import kr.pe.randy.showmethebusstop.model.BusStationApi
+import kr.pe.randy.showmethebusstop.model.StationApi
 
 class SearchPresenter : SearchContract.Presenter, SearchContract.Listener {
     private var searchView : SearchContract.View? = null
@@ -11,7 +11,7 @@ class SearchPresenter : SearchContract.Presenter, SearchContract.Listener {
     }
 
     override fun getStationList(keyword: String) {
-        BusStationApi.searchBusStation(keyword, this)
+        StationApi.searchBusStation(keyword, this)
     }
 
     override fun dropView() {
