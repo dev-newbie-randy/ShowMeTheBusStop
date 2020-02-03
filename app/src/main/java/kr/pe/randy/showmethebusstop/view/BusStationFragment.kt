@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
-import kr.pe.randy.showmethebusstop.presenter.BusStationListAdapter
 import kr.pe.randy.showmethebusstop.presenter.StationContract
 import kr.pe.randy.showmethebusstop.presenter.StationPresenter
 

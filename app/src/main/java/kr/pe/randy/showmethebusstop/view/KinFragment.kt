@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
-import kr.pe.randy.showmethebusstop.presenter.KinListAdapter
 
 class KinFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView

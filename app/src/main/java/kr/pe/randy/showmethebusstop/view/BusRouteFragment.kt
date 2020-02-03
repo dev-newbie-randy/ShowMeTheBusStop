@@ -14,7 +14,6 @@ import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.model.RouteData
-import kr.pe.randy.showmethebusstop.presenter.BusRouteListAdapter
 import kr.pe.randy.showmethebusstop.presenter.RouteContract
 import kr.pe.randy.showmethebusstop.presenter.RoutePresenter
 

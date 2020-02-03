@@ -4,7 +4,6 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
-import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -37,7 +36,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         findViewById<ViewPager2>(R.id.view_pager)
     }
 
-    private val tabList = mutableListOf(BusStationFragment.create(), BusRouteFragment.create(), KinFragment.create())
+    private val tabList = mutableListOf("정류장 검색", "노선 검색", "즐겨찾기")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,25 +49,30 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                (tabList[position] as BusStationFragment).apply {
-                    stationFragment = this
+                return when (position) {
+                    FRAGMENT_STATION -> {
+                        BusStationFragment.create().apply {
+                            stationFragment = this
+                        }
+                    }
+                    FRAGMENT_ROUTE -> {
+                        BusRouteFragment.create().apply {
+                            routeFragment = this
+                        }
+                    }
+                    FRAGMENT_KIN -> {
+                        KinFragment.create().apply {
+                            kinFragment = this
+                        }
+                    }
+                    else -> Fragment()
                 }
-
-                (tabList[position] as BusRouteFragment).apply {
-                    routeFragment = this
-                }
-
-                (tabList[position] as KinFragment).apply {
-                    kinFragment = this
-                }
-
-                return tabList[position]
             }
             override fun getItemCount() = tabList.size
         }
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabList[position].toString()
+            tab.text = tabList[position]
         }.attach()
     }
 
@@ -107,7 +111,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     fun handleSelectedBusStation(busStation: BusStation) {
-        Toast.makeText(this, busStation.stationName + " " + busStation.stationId, Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, busStation.stationName + " " + busStation.stationId, Toast.LENGTH_SHORT).show()
         viewPager.currentItem++
         viewPager.post {
             if (viewPager.currentItem == FRAGMENT_ROUTE) {
