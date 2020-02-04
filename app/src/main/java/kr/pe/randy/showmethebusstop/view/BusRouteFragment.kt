@@ -59,7 +59,7 @@ class BusRouteFragment : Fragment(), RouteContract.View {
         searchPresenter.takeView(this)
     }
 
-    fun searchRoute(station: BusStation) {
+    fun showRoute(station: BusStation) {
         selectedStation = station
         searchPresenter.getRouteList(station.stationId)
         stationNameView.text = station.stationName

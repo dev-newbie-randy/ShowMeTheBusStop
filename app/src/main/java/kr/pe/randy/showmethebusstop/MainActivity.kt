@@ -108,7 +108,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         viewPager.currentItem++
         viewPager.post {
             if (viewPager.currentItem == FRAGMENT_ROUTE) {
-                routeFragment.searchRoute(busStation)
+                routeFragment.showRoute(busStation)
             } else if (viewPager.currentItem == FRAGMENT_KIN) {
                 kinFragment.addToFavorite(busStation)
             }
