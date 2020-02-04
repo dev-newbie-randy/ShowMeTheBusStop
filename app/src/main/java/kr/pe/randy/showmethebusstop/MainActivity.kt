@@ -4,6 +4,7 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var stationFragment: BusStationFragment
     private lateinit var routeFragment: BusRouteFragment
     private lateinit var kinFragment: KinFragment
+
+    private var searchView: SearchView? = null
 
     private val tabLayout by lazy {
         findViewById<TabLayout>(R.id.tabs)
@@ -66,6 +69,14 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             override fun getItemCount() = tabList.size
         }
 
+        viewPager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                searchView?.apply {
+                    visibility = if (position == FRAGMENT_STATION) View.VISIBLE else View.GONE
+                }
+            }
+        })
+
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
             tab.text = tabList[position].first
         }.attach()
@@ -80,7 +91,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
         val searchMenu = menu.findItem(R.id.action_search)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        (searchMenu?.actionView as SearchView).apply {
+        searchView = (searchMenu?.actionView as SearchView).apply {
             queryHint = getString(R.string.search_hint)
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setOnQueryTextListener(this@MainActivity)
