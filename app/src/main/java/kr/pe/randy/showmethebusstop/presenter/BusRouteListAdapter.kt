@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.adapter
+package kr.pe.randy.showmethebusstop.presenter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.data.BusRouteData
+import kr.pe.randy.showmethebusstop.model.RouteData
 
 class BusRouteListAdapter
     : RecyclerView.Adapter<BusRouteListAdapter.BusRouteViewHolder>() {
 
-    private val items = mutableListOf<BusRouteData>()
-    var onItemClick: ((BusRouteData) -> Unit)? = null
+    private val items = mutableListOf<RouteData>()
+    var onItemClick: ((RouteData) -> Unit)? = null
 
     inner class BusRouteViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val busRouteName = view.findViewById<TextView>(R.id.row_name)
@@ -24,7 +24,7 @@ class BusRouteListAdapter
             }
         }
 
-        fun bind(data: BusRouteData) {
+        fun bind(data: RouteData) {
             busRouteName.text = data.routeName + data.regionName
             busType.text = data.routeTypeName
         }
@@ -39,7 +39,7 @@ class BusRouteListAdapter
 
     override fun getItemCount() = items.size
 
-    fun setEntries(newList: List<BusRouteData>) {
+    fun setEntries(newList: List<RouteData>) {
         synchronized(items) {
             items.clear()
             items.addAll(newList)

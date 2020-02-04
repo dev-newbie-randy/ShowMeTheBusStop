@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.adapter
+package kr.pe.randy.showmethebusstop.presenter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.data.BusStationData
+import kr.pe.randy.showmethebusstop.model.BusStation
 
 class BusStationListAdapter
     : RecyclerView.Adapter<BusStationListAdapter.BusStationViewHolder>() {
 
-    private val items = mutableListOf<BusStationData>()
-    var onItemClick: ((BusStationData) -> Unit)? = null
+    private val items = mutableListOf<BusStation>()
+    var onItemClick: ((BusStation) -> Unit)? = null
 
     inner class BusStationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val busStationName = view.findViewById<TextView>(R.id.row_name)
@@ -25,10 +25,12 @@ class BusStationListAdapter
             }
         }
 
-        fun bind(data: BusStationData) {
-            busStationName.text = data.stationName
-            busStationId.text = data.mobileNo
-            region.text = data.regionName
+        fun bind(data: BusStation) {
+            with(data) {
+                busStationName.text = stationName
+                busStationId.text = mobileNo
+                region.text = regionName
+            }
         }
     }
 
@@ -41,7 +43,7 @@ class BusStationListAdapter
 
     override fun getItemCount() = items.size
 
-    fun setEntries(newList: List<BusStationData>) {
+    fun setEntries(newList: List<BusStation>) {
         synchronized(items) {
             items.clear()
             items.addAll(newList)
