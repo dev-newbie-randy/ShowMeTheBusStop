@@ -8,6 +8,7 @@
     android:background="?attr/selectableItemBackground"
     tools:context=".view.BusRouteListAdapter">
 
+
     <Button
         android:id="@+id/left_wall"
         android:layout_width="5dp"
@@ -25,10 +26,10 @@
         android:singleLine="true"
         android:layout_marginTop="1dp"
         android:layout_marginStart="12dp"
-        app:layout_constraintStart_toEndOf="@+id/left_wall"
+        app:layout_constraintStart_toEndOf="@id/left_wall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/row_type"
+        app:layout_constraintBottom_toTopOf="@id/row_type"
         tools:text="75 부천"/>
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -40,9 +41,9 @@
         android:textAlignment="textStart"
         android:layout_marginStart="12dp"
         android:layout_marginBottom="1dp"
-        app:layout_constraintStart_toEndOf="@+id/left_wall"
+        app:layout_constraintStart_toEndOf="@id/left_wall"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/row_name"
+        app:layout_constraintTop_toBottomOf="@id/row_name"
         app:layout_constraintBottom_toBottomOf="parent"
         tools:text="일반형 시내버스"/>
 

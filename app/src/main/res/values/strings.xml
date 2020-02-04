@@ -4,6 +4,6 @@
     <string name="no_result">"검색된 결과가 없습니다."</string>
     <string name="search_hint">"정류소 이름 또는 번호"</string>
     <string name="tab_station">"정류장 검색"</string>
-    <string name="tab_route">"노선 검색"</string>
+    <string name="tab_route">"노선 정보"</string>
     <string name="tab_kin">"즐겨찾기"</string>
 </resources>

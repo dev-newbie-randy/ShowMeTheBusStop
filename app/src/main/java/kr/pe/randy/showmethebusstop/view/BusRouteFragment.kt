@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -21,6 +22,7 @@ class BusRouteFragment : Fragment(), RouteContract.View {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var kinButton: FloatingActionButton
+    private lateinit var stationNameView: TextView
     private lateinit var searchPresenter: RoutePresenter
     private var selectedStation: BusStation? = null
 
@@ -47,6 +49,8 @@ class BusRouteFragment : Fragment(), RouteContract.View {
             }
         }
 
+        stationNameView = view.findViewById(R.id.station_name)
+
         initPresenter()
     }
 
@@ -58,6 +62,7 @@ class BusRouteFragment : Fragment(), RouteContract.View {
     fun searchRoute(station: BusStation) {
         selectedStation = station
         searchPresenter.getRouteList(station.stationId)
+        stationNameView.text = station.stationName
     }
 
     private fun onBusRouteClick(data: RouteData) {
