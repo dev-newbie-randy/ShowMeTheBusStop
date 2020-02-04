@@ -36,11 +36,13 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         findViewById<ViewPager2>(R.id.view_pager)
     }
 
-    private val tabList = mutableListOf(
-        Pair(resources.getString(R.string.tab_station), BusStationFragment::class),
-        Pair(resources.getString(R.string.tab_route), BusRouteFragment::class),
-        Pair(resources.getString(R.string.tab_kin), KinFragment::class)
-    )
+    private val tabList by lazy {
+        mutableListOf(
+            Pair(resources.getString(R.string.tab_station), BusStationFragment::class),
+            Pair(resources.getString(R.string.tab_route), BusRouteFragment::class),
+            Pair(resources.getString(R.string.tab_kin), KinFragment::class)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
