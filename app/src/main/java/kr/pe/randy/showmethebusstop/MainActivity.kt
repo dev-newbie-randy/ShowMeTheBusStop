@@ -111,7 +111,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     fun handleSelectedBusStation(busStation: BusStation) {
-        //Toast.makeText(this, busStation.stationName + " " + busStation.stationId, Toast.LENGTH_SHORT).show()
         viewPager.currentItem++
         viewPager.post {
             if (viewPager.currentItem == FRAGMENT_ROUTE) {

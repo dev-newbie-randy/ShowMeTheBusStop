@@ -1,6 +1,7 @@
 package kr.pe.randy.showmethebusstop.model
 
 import androidx.annotation.NonNull
+import kr.pe.randy.showmethebusstop.BuildConfig
 import kr.pe.randy.showmethebusstop.presenter.StationContract
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,9 +13,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 object StationApi {
-    // https://github.com/android/architecture-samples/tree/todo-mvp
     private const val KEY = "nHrki1yF4qXM1qaWVblXRlklor8rIGkROo1%2F2MegDQES28pGzF4ByMe%2BQud%2FvEnmfg2NF3mldeHq60KO5wBeEA%3D%3D"
-
 
     interface StationSearchService {
         @GET("/ws/rest/busstationservice")
@@ -27,7 +26,11 @@ object StationApi {
     fun searchBusStation(@NonNull keyword: String, @NonNull listener: StationContract.Listener) {
         try {
             val client = OkHttpClient.Builder().addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
+                level = if (BuildConfig.DEBUG) {
+                    HttpLoggingInterceptor.Level.BODY
+                } else {
+                    HttpLoggingInterceptor.Level.NONE
+                }
             }).build()
 
             val retrofit = Retrofit.Builder()
@@ -43,10 +46,8 @@ object StationApi {
                 override fun onResponse(call: Call<StationSearchResponse>,
                                         response: retrofit2.Response<StationSearchResponse>) {
                     if (response.isSuccessful) {
-                        response.body()?.let {
-                            it.msgBody?.let { msgBody ->
-                                listener.onSuccess(msgBody.busStationList.toList())
-                            }
+                        response.body()?.msgBody?.let {
+                            listener.onSuccess(it.busStationList.toList())
                         }
                     }
                 }

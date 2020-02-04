@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="3dp"
     android:background="?attr/selectableItemBackground"
-    tools:context=".presenter.BusStationListAdapter">
+    tools:context=".view.BusStationListAdapter">
 
     <Button
         android:id="@+id/left_wall"

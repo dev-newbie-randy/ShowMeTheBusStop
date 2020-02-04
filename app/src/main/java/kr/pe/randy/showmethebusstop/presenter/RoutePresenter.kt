@@ -11,9 +11,9 @@ class RoutePresenter : RouteContract.Presenter, RouteContract.Listener {
     }
 
     override fun getRouteList(keyword: String) {
-        searchView ?: return
-        searchView!!.getContextIfAvailable() ?: return
-        RouteApi.searchBusRoute(keyword, searchView!!.getContextIfAvailable()!!, this)
+        searchView?.getContextIfAvailable()?.let {
+            RouteApi.searchBusRoute(keyword, it, this)
+        }
     }
 
     override fun dropView() {
