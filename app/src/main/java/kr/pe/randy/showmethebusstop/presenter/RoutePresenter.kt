@@ -12,7 +12,7 @@ class RoutePresenter : RouteContract.Presenter, RouteContract.Listener {
 
     override fun getRouteList(keyword: String) {
         searchView?.getContextIfAvailable()?.let {
-            RouteApi.searchBusRoute(keyword, it, this)
+            RouteApi.searchBusRoute(keyword, it, this@RoutePresenter)
         }
     }
 
