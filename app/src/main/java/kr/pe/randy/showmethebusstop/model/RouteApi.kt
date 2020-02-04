@@ -42,12 +42,14 @@ object RouteApi {
 
     private fun getBusRouteListUrl(@NonNull busStationId: String) : String {
         val urlBuilder = StringBuilder("http://openapi.gbis.go.kr/ws/rest/busstationservice/route")
-        urlBuilder.append("?")
-        urlBuilder.append("serviceKey=")
-        urlBuilder.append(KEY)
-        urlBuilder.append("&")
-        urlBuilder.append("stationId=")
-        urlBuilder.append(busStationId)
+        with(urlBuilder) {
+            append("?")
+            append("serviceKey=")
+            append(KEY)
+            append("&")
+            append("stationId=")
+            append(busStationId)
+        }
         return urlBuilder.toString()
     }
 }

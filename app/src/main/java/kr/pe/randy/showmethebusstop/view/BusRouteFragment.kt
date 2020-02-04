@@ -9,16 +9,20 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
+import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.model.RouteData
-import kr.pe.randy.showmethebusstop.presenter.BusRouteListAdapter
 import kr.pe.randy.showmethebusstop.presenter.RouteContract
 import kr.pe.randy.showmethebusstop.presenter.RoutePresenter
 
 class BusRouteFragment : Fragment(), RouteContract.View {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var kinButton: FloatingActionButton
     private lateinit var searchPresenter: RoutePresenter
+    private var selectedStation: BusStation? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return LayoutInflater.from(context).inflate(R.layout.fragment_route, container, false)
@@ -35,6 +39,14 @@ class BusRouteFragment : Fragment(), RouteContract.View {
             }
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
+
+        kinButton = view.findViewById<FloatingActionButton>(R.id.fab).apply {
+            setOnClickListener {
+                selectedStation ?: return@setOnClickListener
+                (activity as? MainActivity)?.handleSelectedBusStation(selectedStation!!)
+            }
+        }
+
         initPresenter()
     }
 
@@ -43,8 +55,9 @@ class BusRouteFragment : Fragment(), RouteContract.View {
         searchPresenter.takeView(this)
     }
 
-    fun searchRoute(keyword: String) {
-        searchPresenter.getRouteList(keyword)
+    fun searchRoute(station: BusStation) {
+        selectedStation = station
+        searchPresenter.getRouteList(station.stationId)
     }
 
     private fun onBusRouteClick(data: RouteData) {
@@ -56,12 +69,19 @@ class BusRouteFragment : Fragment(), RouteContract.View {
     }
 
     // RouteContract.View
-    override fun showRouteList(list : List<RouteData>) {
-        (recyclerView.adapter as BusRouteListAdapter).setEntries(list)
+    override fun showRouteList(stationList : List<RouteData>) {
+        kinButton.isEnabled = stationList.isNotEmpty()
+        (recyclerView.adapter as? BusRouteListAdapter)?.setEntries(stationList)
     }
 
     // RouteContract.View
     override fun showError(error : String) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+    }
+
+    companion object {
+        fun create(): BusRouteFragment {
+            return BusRouteFragment()
+        }
     }
 }

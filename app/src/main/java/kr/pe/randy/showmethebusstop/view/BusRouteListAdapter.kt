@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.presenter
+package kr.pe.randy.showmethebusstop.view
 
 import android.view.LayoutInflater
 import android.view.View

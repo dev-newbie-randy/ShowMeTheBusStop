@@ -3,22 +3,46 @@ package kr.pe.randy.showmethebusstop
 import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.Menu
-import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.fragment.app.commit
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.view.BusRouteFragment
 import kr.pe.randy.showmethebusstop.view.BusStationFragment
+import kr.pe.randy.showmethebusstop.view.KinFragment
 
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
-    private var stationFragment: BusStationFragment? = null
-    private var routeFragment: BusRouteFragment? = null
+    companion object {
+        private const val FRAGMENT_STATION = 0
+        private const val FRAGMENT_ROUTE = 1
+        private const val FRAGMENT_KIN = 2
+    }
+
+    private lateinit var stationFragment: BusStationFragment
+    private lateinit var routeFragment: BusRouteFragment
+    private lateinit var kinFragment: KinFragment
+
+    private val tabLayout by lazy {
+        findViewById<TabLayout>(R.id.tabs)
+    }
+    private val viewPager by lazy {
+        findViewById<ViewPager2>(R.id.view_pager)
+    }
+
+    private val tabList by lazy {
+        mutableListOf(
+            Pair(resources.getString(R.string.tab_station), BusStationFragment::class),
+            Pair(resources.getString(R.string.tab_route), BusRouteFragment::class),
+            Pair(resources.getString(R.string.tab_kin), KinFragment::class)
+        )
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,11 +52,28 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             displayOptions = ActionBar.DISPLAY_SHOW_HOME
             setIcon(R.drawable.baseline_directions_bus_24)
         }
+
+        viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun createFragment(position: Int): Fragment {
+                return tabList[position].second.constructors.first().call().apply {
+                    when (this) {
+                        is BusStationFragment -> stationFragment = this
+                        is BusRouteFragment -> routeFragment = this
+                        is KinFragment -> kinFragment = this
+                    }
+                }
+            }
+            override fun getItemCount() = tabList.size
+        }
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = tabList[position].first
+        }.attach()
     }
 
     override fun onStart() {
         super.onStart()
-        showBusStationFragment()
+        viewPager.currentItem = FRAGMENT_STATION
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -49,46 +90,28 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String): Boolean {
         prepareSearch()
-        stationFragment?.searchStation(query)
+        stationFragment.searchStation(query)
         return false
     }
 
     override fun onQueryTextChange(newText: String) = false
 
-    private fun showBusStationFragment() {
-        supportFragmentManager.commit(true) {
-            stationFragment ?: run {
-                stationFragment =
-                    BusStationFragment()
-            }
-            replace(R.id.fragment_container, stationFragment!!, BusStationFragment::javaClass.name)
-        }
-    }
-
-    private fun showBusRouteFragment() {
-        supportFragmentManager.commit(true) {
-            routeFragment ?: run {
-                routeFragment =
-                    BusRouteFragment()
-            }
-            replace(R.id.fragment_container, routeFragment!!, BusRouteFragment::javaClass.name)
-        }
-    }
-
     private fun prepareSearch() {
-        val fragment = supportFragmentManager.fragments[0]
-        if (fragment is BusStationFragment) {
-            fragment.clearNoResult()
-        } else if (fragment is BusRouteFragment) {
-            showBusStationFragment()
+        if (viewPager.currentItem == FRAGMENT_STATION) {
+            stationFragment.clearNoResult()
+        } else if (viewPager.currentItem == FRAGMENT_ROUTE) {
+            viewPager.currentItem--
         }
     }
 
     fun handleSelectedBusStation(busStation: BusStation) {
-        Toast.makeText(this, busStation.stationName + " " + busStation.stationId, Toast.LENGTH_SHORT).show()
-        showBusRouteFragment()
-        Handler(Looper.getMainLooper()).postDelayed({
-            (routeFragment?.searchRoute(busStation.stationId))
-        }, 100L)
+        viewPager.currentItem++
+        viewPager.post {
+            if (viewPager.currentItem == FRAGMENT_ROUTE) {
+                routeFragment.searchRoute(busStation)
+            } else if (viewPager.currentItem == FRAGMENT_KIN) {
+                kinFragment.addToFavorite(busStation)
+            }
+        }
     }
 }

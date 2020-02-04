@@ -8,23 +8,18 @@ import org.json.JSONObject
 object RouteParser {
 
     fun parseResponse(@NonNull response: String) : MutableList<RouteData> {
-        val receivedJSon = XmlToJson.Builder(response).build().toJson()!!
-        val responseJSon = receivedJSon.getJSONObject("response")
-        val msgBodyJSon = responseJSon.optJSONObject("msgBody")
+        val receivedJSon = XmlToJson.Builder(response).build().toJson()
+        val responseJSon = receivedJSon?.getJSONObject("response")
+        val msgBodyJSon = responseJSon?.optJSONObject("msgBody")
 
-        msgBodyJSon ?: run {
-            return mutableListOf()
-        }
-
-        msgBodyJSon.optJSONArray("busRouteList")?.let {
-            return getBusRouteList(it)
-        } ?: run {
-            msgBodyJSon.optJSONObject("busRouteList")?.let {
+        msgBodyJSon?.run {
+            optJSONArray("busRouteList")?.let {
                 return getBusRouteList(it)
             }
-        }
-
-        return mutableListOf()
+            optJSONObject("busRouteList")?.let {
+                return getBusRouteList(it)
+            }
+        } ?: return mutableListOf()
     }
 
     private fun getBusRouteList(busRouteListJson: JSONArray): MutableList<RouteData> {
@@ -67,15 +62,4 @@ object RouteParser {
         busRouteList.add(busRouteData)
         return busRouteList
     }
-//
-//    fun convertId(rawId: String): String {
-//        val id = rawId.trim()
-//        if (id.isNotEmpty()) {
-//            val builder = StringBuilder(id.substring(0, 2))
-//            builder.append("-")
-//            builder.append(id.substring(2, id.length))
-//            return builder.toString()
-//        }
-//        return id
-//    }
 }
