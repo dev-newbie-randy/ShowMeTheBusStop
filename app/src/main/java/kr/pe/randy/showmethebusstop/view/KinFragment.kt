@@ -29,10 +29,6 @@ class KinFragment : Fragment() {
         (recyclerView.adapter as KinListAdapter).addToFavorite(station)
     }
 
-    override fun toString(): String {
-        return "즐겨찾기"
-    }
-
     companion object {
         fun create(): KinFragment {
             return KinFragment()

@@ -71,16 +71,12 @@ class BusRouteFragment : Fragment(), RouteContract.View {
     // RouteContract.View
     override fun showRouteList(stationList : List<RouteData>) {
         kinButton.isEnabled = stationList.isNotEmpty()
-        (recyclerView.adapter as BusRouteListAdapter).setEntries(stationList)
+        (recyclerView.adapter as? BusRouteListAdapter)?.setEntries(stationList)
     }
 
     // RouteContract.View
     override fun showError(error : String) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun toString(): String {
-        return "노선 검색"
     }
 
     companion object {

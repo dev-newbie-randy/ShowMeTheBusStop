@@ -71,10 +71,6 @@ class BusStationFragment : Fragment(), StationContract.View {
         (activity as? MainActivity)?.handleSelectedBusStation(data)
     }
 
-    override fun toString(): String {
-        return "정류장 검색"
-    }
-
     companion object {
         fun create(): BusStationFragment {
             return BusStationFragment()

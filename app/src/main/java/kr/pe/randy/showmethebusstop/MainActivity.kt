@@ -25,9 +25,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         private const val FRAGMENT_KIN = 2
     }
 
-    private var stationFragment: BusStationFragment? = null
-    private var routeFragment: BusRouteFragment? = null
-    private var kinFragment: KinFragment? = null
+    private lateinit var stationFragment: BusStationFragment
+    private lateinit var routeFragment: BusRouteFragment
+    private lateinit var kinFragment: KinFragment
 
     private val tabLayout by lazy {
         findViewById<TabLayout>(R.id.tabs)
@@ -36,7 +36,11 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         findViewById<ViewPager2>(R.id.view_pager)
     }
 
-    private val tabList = mutableListOf("정류장 검색", "노선 검색", "즐겨찾기")
+    private val tabList = mutableListOf(
+        Pair(resources.getString(R.string.tab_station), BusStationFragment::class),
+        Pair(resources.getString(R.string.tab_route), BusRouteFragment::class),
+        Pair(resources.getString(R.string.tab_kin), KinFragment::class)
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,30 +53,19 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return when (position) {
-                    FRAGMENT_STATION -> {
-                        BusStationFragment.create().apply {
-                            stationFragment = this
-                        }
+                return tabList[position].second.constructors.first().call().apply {
+                    when (this) {
+                        is BusStationFragment -> stationFragment = this
+                        is BusRouteFragment -> routeFragment = this
+                        is KinFragment -> kinFragment = this
                     }
-                    FRAGMENT_ROUTE -> {
-                        BusRouteFragment.create().apply {
-                            routeFragment = this
-                        }
-                    }
-                    FRAGMENT_KIN -> {
-                        KinFragment.create().apply {
-                            kinFragment = this
-                        }
-                    }
-                    else -> Fragment()
                 }
             }
             override fun getItemCount() = tabList.size
         }
 
         TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabList[position]
+            tab.text = tabList[position].first
         }.attach()
     }
 
@@ -95,18 +88,17 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String): Boolean {
         prepareSearch()
-        stationFragment?.searchStation(query)
+        stationFragment.searchStation(query)
         return false
     }
 
     override fun onQueryTextChange(newText: String) = false
 
     private fun prepareSearch() {
-        val fragment = supportFragmentManager.fragments[0]
-        if (fragment is BusStationFragment) {
-            fragment.clearNoResult()
-        } else if (fragment is BusRouteFragment) {
-            viewPager.currentItem = FRAGMENT_STATION
+        if (viewPager.currentItem == FRAGMENT_STATION) {
+            stationFragment.clearNoResult()
+        } else if (viewPager.currentItem == FRAGMENT_ROUTE) {
+            viewPager.currentItem--
         }
     }
 
@@ -114,9 +106,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         viewPager.currentItem++
         viewPager.post {
             if (viewPager.currentItem == FRAGMENT_ROUTE) {
-                routeFragment?.searchRoute(busStation)
+                routeFragment.searchRoute(busStation)
             } else if (viewPager.currentItem == FRAGMENT_KIN) {
-                kinFragment?.addToFavorite(busStation)
+                kinFragment.addToFavorite(busStation)
             }
         }
     }
