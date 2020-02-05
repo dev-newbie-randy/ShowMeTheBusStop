@@ -47,6 +47,7 @@ class BusStationFragment : Fragment(), StationContract.View {
     }
 
     fun searchStation(keyword: String) {
+        clearNoResult()
         searchPresenter.getStationList(keyword)
     }
 

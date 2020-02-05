@@ -8,6 +8,7 @@
         android:icon="@drawable/baseline_search_24"
         android:title="@string/search"
         android:iconTint="@color/colorPrimary" tools:targetApi="26"
+        android:visible="false"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="androidx.appcompat.widget.SearchView" />
 </menu>

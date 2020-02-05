@@ -13,6 +13,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import kr.pe.randy.showmethebusstop.ext.moveNext
 import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.view.BusRouteFragment
 import kr.pe.randy.showmethebusstop.view.BusStationFragment
@@ -21,9 +22,9 @@ import kr.pe.randy.showmethebusstop.view.KinFragment
 class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     companion object {
-        private const val FRAGMENT_STATION = 0
-        private const val FRAGMENT_ROUTE = 1
-        private const val FRAGMENT_KIN = 2
+        private const val FRAGMENT_KIN = 0
+        private const val FRAGMENT_STATION = 1
+        private const val FRAGMENT_ROUTE = 2
     }
 
     private lateinit var stationFragment: BusStationFragment
@@ -41,9 +42,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private val tabList by lazy {
         mutableListOf(
+            Pair(resources.getString(R.string.tab_kin), KinFragment::class),
             Pair(resources.getString(R.string.tab_station), BusStationFragment::class),
-            Pair(resources.getString(R.string.tab_route), BusRouteFragment::class),
-            Pair(resources.getString(R.string.tab_kin), KinFragment::class)
+            Pair(resources.getString(R.string.tab_route), BusRouteFragment::class)
         )
     }
 
@@ -60,9 +61,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
             override fun createFragment(position: Int): Fragment {
                 return tabList[position].second.constructors.first().call().apply {
                     when (this) {
+                        is KinFragment -> kinFragment = this
                         is BusStationFragment -> stationFragment = this
                         is BusRouteFragment -> routeFragment = this
-                        is KinFragment -> kinFragment = this
                     }
                 }
             }
@@ -76,9 +77,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 }
                 supportActionBar?.apply {
                     title = when (position) {
+                        FRAGMENT_KIN -> resources.getString(R.string.actionbar_kin)
                         FRAGMENT_STATION -> resources.getString(R.string.actionbar_station)
                         FRAGMENT_ROUTE -> resources.getString(R.string.actionbar_route)
-                        FRAGMENT_KIN -> resources.getString(R.string.actionbar_kin)
                         else -> ""
                     }
                 }
@@ -92,7 +93,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onStart() {
         super.onStart()
-        viewPager.currentItem = FRAGMENT_STATION
+        viewPager.currentItem = FRAGMENT_KIN
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -108,7 +109,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextSubmit(query: String): Boolean {
-        prepareSearch()
         stationFragment.searchStation(query)
         supportActionBar?.collapseActionView()
         return false
@@ -116,16 +116,8 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String) = false
 
-    private fun prepareSearch() {
-        if (viewPager.currentItem == FRAGMENT_STATION) {
-            stationFragment.clearNoResult()
-        } else if (viewPager.currentItem == FRAGMENT_ROUTE) {
-            viewPager.currentItem--
-        }
-    }
-
     fun handleSelectedBusStation(busStation: BusStation) {
-        viewPager.currentItem++
+        viewPager.moveNext()
         viewPager.post {
             if (viewPager.currentItem == FRAGMENT_ROUTE) {
                 routeFragment.showRoute(busStation)
