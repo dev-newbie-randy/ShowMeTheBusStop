@@ -11,7 +11,7 @@ import com.google.android.material.snackbar.Snackbar
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
 
-class KinListAdapter
+class KinListAdapter(private val onItemClick: (BusStation) -> Unit)
     : RecyclerView.Adapter<KinListAdapter.KinViewHolder>(){
 
     private val items = mutableListOf<BusStation>()
@@ -21,6 +21,12 @@ class KinListAdapter
         private val busStationName = view.findViewById<TextView>(R.id.row_name)
         private val busStationId = view.findViewById<TextView>(R.id.row_id)
         private val region = view.findViewById<TextView>(R.id.row_region)
+
+        init {
+            rootView.setOnClickListener {
+                onItemClick(items[adapterPosition])
+            }
+        }
 
         fun bind(data: BusStation) {
             with(data) {

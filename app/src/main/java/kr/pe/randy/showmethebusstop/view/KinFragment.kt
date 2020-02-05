@@ -7,11 +7,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
 
 class KinFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
+
+    private val onItemClick: (busStation: BusStation) -> Unit = { item ->
+        (requireActivity() as MainActivity).handleSelectedBusStation(item)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return LayoutInflater.from(context).inflate(R.layout.fragment_kin, container, false)
@@ -20,7 +25,7 @@ class KinFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
-            adapter = KinListAdapter()
+            adapter = KinListAdapter(onItemClick)
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
     }
