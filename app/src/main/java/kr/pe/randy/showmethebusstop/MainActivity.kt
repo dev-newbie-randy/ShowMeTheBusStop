@@ -4,7 +4,7 @@ import android.app.SearchManager
 import android.content.Context
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
+import android.view.MenuItem
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     private lateinit var routeFragment: BusRouteFragment
     private lateinit var kinFragment: KinFragment
 
-    private var searchView: SearchView? = null
+    private var searchMenu: MenuItem? = null
 
     private val tabLayout by lazy {
         findViewById<TabLayout>(R.id.tabs)
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         setContentView(R.layout.activity_main)
 
         supportActionBar?.apply {
-            displayOptions = ActionBar.DISPLAY_SHOW_HOME
+            displayOptions = ActionBar.DISPLAY_SHOW_HOME or ActionBar.DISPLAY_SHOW_TITLE
             setIcon(R.drawable.baseline_directions_bus_24)
         }
 
@@ -71,8 +71,16 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         viewPager.registerOnPageChangeCallback(object :ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
-                searchView?.apply {
-                    visibility = if (position == FRAGMENT_STATION) View.VISIBLE else View.GONE
+                searchMenu?.apply {
+                    isVisible = (position == FRAGMENT_STATION)
+                }
+                supportActionBar?.apply {
+                    title = when (position) {
+                        FRAGMENT_STATION -> resources.getString(R.string.actionbar_station)
+                        FRAGMENT_ROUTE -> resources.getString(R.string.actionbar_route)
+                        FRAGMENT_KIN -> resources.getString(R.string.actionbar_kin)
+                        else -> ""
+                    }
                 }
             }
         })
@@ -89,9 +97,9 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.toolbar_menu, menu)
-        val searchMenu = menu.findItem(R.id.action_search)
+        searchMenu = menu.findItem(R.id.action_search)
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchView = (searchMenu?.actionView as SearchView).apply {
+        (searchMenu?.actionView as SearchView).apply {
             queryHint = getString(R.string.search_hint)
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
             setOnQueryTextListener(this@MainActivity)
@@ -102,6 +110,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
     override fun onQueryTextSubmit(query: String): Boolean {
         prepareSearch()
         stationFragment.searchStation(query)
+        supportActionBar?.collapseActionView()
         return false
     }
 
