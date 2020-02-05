@@ -46,12 +46,12 @@ class KinListAdapter
                 it == station
             }?.also {
                 rootView.post {
-                    Toast.makeText(rootView.context, "풉 이미 즐겨찾기 됐는데~", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(rootView.context, rootView.context.getText(R.string.favorite_already_exist), Toast.LENGTH_SHORT).show()
                 }
             } ?: run {
                 items.add(station)
                 Handler().postDelayed( {
-                    Snackbar.make(rootView, "즐겨찾기에 추가되었습니다.", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(rootView, rootView.context.getText(R.string.favorite_added), Snackbar.LENGTH_SHORT).show()
                 }, 500)
             }
             notifyDataSetChanged()
