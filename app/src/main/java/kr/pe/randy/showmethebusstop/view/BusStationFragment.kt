@@ -47,7 +47,7 @@ class BusStationFragment : Fragment(), StationContract.View {
     }
 
     fun searchStation(keyword: String) {
-        clearNoResult()
+        noResultView.visibility = View.GONE
         searchPresenter.getStationList(keyword)
     }
 
@@ -64,17 +64,7 @@ class BusStationFragment : Fragment(), StationContract.View {
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 
-    fun clearNoResult() {
-        noResultView.visibility = View.GONE
-    }
-
     private fun onBusStationClick(data: BusStation) {
         (activity as? MainActivity)?.handleSelectedBusStation(data)
-    }
-
-    companion object {
-        fun create(): BusStationFragment {
-            return BusStationFragment()
-        }
     }
 }

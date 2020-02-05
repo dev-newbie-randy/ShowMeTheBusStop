@@ -83,10 +83,4 @@ class BusRouteFragment : Fragment(), RouteContract.View {
     override fun showError(error : String) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
     }
-
-    companion object {
-        fun create(): BusRouteFragment {
-            return BusRouteFragment()
-        }
-    }
 }

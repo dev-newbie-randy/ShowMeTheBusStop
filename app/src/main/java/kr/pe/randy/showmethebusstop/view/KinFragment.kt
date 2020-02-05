@@ -28,10 +28,4 @@ class KinFragment : Fragment() {
     fun addToFavorite(station: BusStation) {
         (recyclerView.adapter as KinListAdapter).addToFavorite(station)
     }
-
-    companion object {
-        fun create(): KinFragment {
-            return KinFragment()
-        }
-    }
 }
