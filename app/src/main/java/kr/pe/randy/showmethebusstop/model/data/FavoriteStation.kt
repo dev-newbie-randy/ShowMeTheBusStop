@@ -8,6 +8,5 @@ data class FavoriteStation(
     @PrimaryKey
     val stationId: String,
     val stationNumber: String,
-    val stationName: String,
-    val regionName: String
+    val stationName: String
 )

@@ -45,7 +45,7 @@ class BusRouteFragment : Fragment(), RouteContract.View {
         kinButton = view.findViewById<FloatingActionButton>(R.id.fab).apply {
             setOnClickListener {
                 selectedStation ?: return@setOnClickListener
-                (activity as? MainActivity)?.handleSelectedBusStation(selectedStation!!, true)
+                (activity as? MainActivity)?.handleSelectedBusStation(selectedStation!!, false)
             }
         }
 

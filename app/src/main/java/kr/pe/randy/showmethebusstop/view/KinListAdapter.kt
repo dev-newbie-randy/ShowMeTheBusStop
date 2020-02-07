@@ -10,7 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
 
-class KinListAdapter(private val onDeleteIconClick: (BusStation) -> Unit)
+class KinListAdapter(private val onItemClick: (BusStation) -> Unit,
+    private val onDeleteIconClick: (BusStation) -> Unit)
     : RecyclerView.Adapter<KinListAdapter.KinViewHolder>(){
 
     private val items = mutableListOf<BusStation>()
@@ -19,10 +20,13 @@ class KinListAdapter(private val onDeleteIconClick: (BusStation) -> Unit)
     inner class KinViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val busStationName = view.findViewById<TextView>(R.id.row_name)
         private val busStationId = view.findViewById<TextView>(R.id.row_id)
-        private val region = view.findViewById<TextView>(R.id.row_region)
         private val delete = view.findViewById<AppCompatImageButton>(R.id.delete_button)
 
         init {
+            rootView.setOnClickListener {
+                onItemClick(items[adapterPosition])
+            }
+
             rootView.findViewById<AppCompatImageButton>(R.id.delete_button).setOnClickListener {
                 onDeleteIconClick(items[adapterPosition])
             }
@@ -32,7 +36,6 @@ class KinListAdapter(private val onDeleteIconClick: (BusStation) -> Unit)
             with(data) {
                 busStationName.text = stationName
                 busStationId.text = mobileNo
-                region.text = regionName
                 delete.isVisible = true
             }
         }

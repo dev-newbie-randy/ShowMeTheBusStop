@@ -24,11 +24,11 @@ class FavoriteApi {
         get() = _itemList
 
     private fun convertData(newItem: BusStation) = with(newItem) {
-        FavoriteStation(stationId, mobileNo, stationName, regionName)
+        FavoriteStation(stationId, mobileNo, stationName)
     }
 
     private fun convertData(favorite: FavoriteStation) = with(favorite) {
-        BusStation(stationId = stationId, mobileNo = stationNumber, stationName = stationName, regionName = regionName)
+        BusStation(stationId = stationId, mobileNo = stationNumber, stationName = stationName)
     }
 
     fun insertStation(station: BusStation, listener: KinContract.Listener) {

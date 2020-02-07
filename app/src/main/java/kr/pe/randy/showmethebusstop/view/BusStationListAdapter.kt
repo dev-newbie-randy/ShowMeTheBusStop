@@ -17,7 +17,6 @@ class BusStationListAdapter
     inner class BusStationViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val busStationName = view.findViewById<TextView>(R.id.row_name)
         private val busStationId = view.findViewById<TextView>(R.id.row_id)
-        private val region = view.findViewById<TextView>(R.id.row_region)
 
         init {
             view.setOnClickListener {
@@ -29,7 +28,6 @@ class BusStationListAdapter
             with(data) {
                 busStationName.text = stationName
                 busStationId.text = mobileNo
-                region.text = regionName
             }
         }
     }

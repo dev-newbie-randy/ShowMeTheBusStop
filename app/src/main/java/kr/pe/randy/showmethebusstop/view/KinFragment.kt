@@ -20,8 +20,12 @@ class KinFragment : Fragment(), KinContract.View {
     private lateinit var recyclerView: RecyclerView
     private lateinit var presenter: KinPresenter
 
-    private val onDeleteIconClick: (busStation: BusStation) -> Unit = { item ->
+    private val onItemClick: (busStation: BusStation) -> Unit = { item ->
         (requireActivity() as MainActivity).handleSelectedBusStation(item, false)
+    }
+
+    private val onDeleteIconClick: (busStation: BusStation) -> Unit = { item ->
+        (requireActivity() as MainActivity).handleSelectedBusStation(item, true)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -31,7 +35,7 @@ class KinFragment : Fragment(), KinContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_favorite).apply {
-            adapter = KinListAdapter(onDeleteIconClick)
+            adapter = KinListAdapter(onItemClick, onDeleteIconClick)
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
         initPresenter()

@@ -17,9 +17,9 @@ class KinPresenter: KinContract.Presenter, KinContract.Listener {
 
     override fun loadFavorites() {
         if (!FavoriteApi.INSTANCE.itemList.hasObservers()) {
-            view?.let {
-                FavoriteApi.INSTANCE.itemList.observe(it.getLifecycleOwner(), Observer { list ->
-                    it.showFavorites(list)
+            view?.run {
+                FavoriteApi.INSTANCE.itemList.observe(getLifecycleOwner(), Observer { list ->
+                    showFavorites(list)
                 })
             }
         }

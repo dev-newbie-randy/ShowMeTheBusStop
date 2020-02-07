@@ -16,10 +16,10 @@ object StationApi {
     private const val KEY = "nHrki1yF4qXM1qaWVblXRlklor8rIGkROo1%2F2MegDQES28pGzF4ByMe%2BQud%2FvEnmfg2NF3mldeHq60KO5wBeEA%3D%3D"
 
     interface StationSearchService {
-        @GET("/ws/rest/busstationservice")
+        @GET("/api/rest/stationinfo/getStationByName")
         fun setSearchParam(
             @Query("serviceKey", encoded = true) key: String,
-            @Query("keyword", encoded = false) keyword: String
+            @Query("stSrch", encoded = false) keyword: String
         ): Call<StationSearchResponse>
     }
 
@@ -34,7 +34,7 @@ object StationApi {
             }).build()
 
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://openapi.gbis.go.kr")
+                .baseUrl("http://ws.bus.go.kr")
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 .client(client)
                 .build()

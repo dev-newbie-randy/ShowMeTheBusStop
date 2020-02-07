@@ -14,6 +14,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kr.pe.randy.showmethebusstop.ext.moveNext
+import kr.pe.randy.showmethebusstop.ext.movePrev
 import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.view.BusRouteFragment
 import kr.pe.randy.showmethebusstop.view.BusStationFragment
@@ -116,15 +117,21 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String) = false
 
-    fun handleSelectedBusStation(busStation: BusStation, isAdd: Boolean = false) {
+    fun handleSelectedBusStation(busStation: BusStation, isDelete: Boolean = false) {
         with(viewPager) {
-            if (currentItem != FRAGMENT_KIN) moveNext()
+            when (currentItem) {
+                FRAGMENT_KIN -> {
+                    if (!isDelete) movePrev() else kinFragment.removeFromFavorite(busStation)
+                }
+                FRAGMENT_STATION -> moveNext()
+                FRAGMENT_ROUTE -> moveNext()
+            }
+
             post {
                 if (currentItem == FRAGMENT_ROUTE) {
                     routeFragment.showRoute(busStation)
-                } else if (currentItem == FRAGMENT_KIN) {
-                    if (isAdd) kinFragment.addToFavorite(busStation)
-                    else kinFragment.removeFromFavorite(busStation)
+                } else if (currentItem == FRAGMENT_KIN  && !isDelete) {
+                    kinFragment.addToFavorite(busStation)
                 }
             }
         }
