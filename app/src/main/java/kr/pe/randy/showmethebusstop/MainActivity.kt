@@ -14,7 +14,6 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import kr.pe.randy.showmethebusstop.ext.moveNext
-import kr.pe.randy.showmethebusstop.ext.movePrev
 import kr.pe.randy.showmethebusstop.model.BusStation
 import kr.pe.randy.showmethebusstop.view.BusRouteFragment
 import kr.pe.randy.showmethebusstop.view.BusStationFragment
@@ -60,7 +59,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
         viewPager.adapter = object : FragmentStateAdapter(this) {
             override fun createFragment(position: Int): Fragment {
-                return tabList[position].second.constructors.first().call().apply {
+                return (tabList[position].second.constructors.first().call() as Fragment).apply {
                     when (this) {
                         is KinFragment -> kinFragment = this
                         is BusStationFragment -> stationFragment = this
@@ -117,17 +116,16 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String) = false
 
-    fun handleSelectedBusStation(busStation: BusStation) {
-        if (viewPager.currentItem == FRAGMENT_KIN) {
-            viewPager.movePrev()
-        } else {
-            viewPager.moveNext()
-        }
-        viewPager.post {
-            if (viewPager.currentItem == FRAGMENT_ROUTE) {
-                routeFragment.showRoute(busStation)
-            } else if (viewPager.currentItem == FRAGMENT_KIN) {
-                kinFragment.addToFavorite(busStation)
+    fun handleSelectedBusStation(busStation: BusStation, isAdd: Boolean = false) {
+        with(viewPager) {
+            if (currentItem != FRAGMENT_KIN) moveNext()
+            post {
+                if (currentItem == FRAGMENT_ROUTE) {
+                    routeFragment.showRoute(busStation)
+                } else if (currentItem == FRAGMENT_KIN) {
+                    if (isAdd) kinFragment.addToFavorite(busStation)
+                    else kinFragment.removeFromFavorite(busStation)
+                }
             }
         }
     }
