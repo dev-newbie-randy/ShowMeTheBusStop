@@ -1,17 +1,16 @@
 package kr.pe.randy.showmethebusstop.view
 
-import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageButton
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.snackbar.Snackbar
 import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.model.BusStation
 
-class KinListAdapter
+class KinListAdapter(private val onDeleteIconClick: (BusStation) -> Unit)
     : RecyclerView.Adapter<KinListAdapter.KinViewHolder>(){
 
     private val items = mutableListOf<BusStation>()
@@ -21,18 +20,26 @@ class KinListAdapter
         private val busStationName = view.findViewById<TextView>(R.id.row_name)
         private val busStationId = view.findViewById<TextView>(R.id.row_id)
         private val region = view.findViewById<TextView>(R.id.row_region)
+        private val delete = view.findViewById<AppCompatImageButton>(R.id.delete_button)
+
+        init {
+            rootView.findViewById<AppCompatImageButton>(R.id.delete_button).setOnClickListener {
+                onDeleteIconClick(items[adapterPosition])
+            }
+        }
 
         fun bind(data: BusStation) {
             with(data) {
                 busStationName.text = stationName
                 busStationId.text = mobileNo
                 region.text = regionName
+                delete.isVisible = true
             }
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KinViewHolder {
-        rootView = LayoutInflater.from(parent.context).inflate(R.layout.station_item_row, parent, false)
+        rootView = LayoutInflater.from(parent.context).inflate(R.layout.kin_item_row, parent, false)
         return KinViewHolder(rootView)
     }
 
@@ -40,20 +47,10 @@ class KinListAdapter
 
     override fun getItemCount() = items.size
 
-    fun addToFavorite(station: BusStation) {
+    fun setEntries(newList: List<BusStation>) {
         synchronized(items) {
-            items.asSequence().find {
-                it == station
-            }?.also {
-                rootView.post {
-                    Toast.makeText(rootView.context, "풉 이미 즐겨찾기 됐는데~", Toast.LENGTH_SHORT).show()
-                }
-            } ?: run {
-                items.add(station)
-                Handler().postDelayed( {
-                    Snackbar.make(rootView, "즐겨찾기에 추가되었습니다.", Snackbar.LENGTH_SHORT).show()
-                }, 500)
-            }
+            items.clear()
+            items.addAll(newList)
             notifyDataSetChanged()
         }
     }

@@ -45,7 +45,7 @@ class BusRouteFragment : Fragment(), RouteContract.View {
         kinButton = view.findViewById<FloatingActionButton>(R.id.fab).apply {
             setOnClickListener {
                 selectedStation ?: return@setOnClickListener
-                (activity as? MainActivity)?.handleSelectedBusStation(selectedStation!!)
+                (activity as? MainActivity)?.handleSelectedBusStation(selectedStation!!, true)
             }
         }
 
@@ -66,7 +66,7 @@ class BusRouteFragment : Fragment(), RouteContract.View {
     }
 
     private fun onBusRouteClick(data: RouteData) {
-        Toast.makeText(activity, data.routeId, Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), data.routeId, Toast.LENGTH_SHORT).show()
     }
 
     override fun getContextIfAvailable(): Context? {
@@ -82,11 +82,5 @@ class BusRouteFragment : Fragment(), RouteContract.View {
     // RouteContract.View
     override fun showError(error : String) {
         Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
-    }
-
-    companion object {
-        fun create(): BusRouteFragment {
-            return BusRouteFragment()
-        }
     }
 }
