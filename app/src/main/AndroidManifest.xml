@@ -11,14 +11,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".MainActivity"
+            android:launchMode="singleInstance"
             android:configChanges="keyboard|keyboardHidden|navigation|orientation|layoutDirection|screenSize|smallestScreenSize|screenLayout">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable"/>
         </activity>
+
+        <provider android:name=".view.provider.StationSuggestionProvider"
+            android:authorities="kr.pe.randy.StationSuggestionProvider" />
+
         <meta-data
             android:name="service_key"
             android:value="nHrki1yF4qXM1qaWVblXRlklor8rIGkROo1%2F2MegDQES28pGzF4ByMe%2BQud%2FvEnmfg2NF3mldeHq60KO5wBeEA%3D%3D" />

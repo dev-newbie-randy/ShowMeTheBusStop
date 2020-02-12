@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.view
+package kr.pe.randy.showmethebusstop.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,19 +12,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.model.BusStation
+import kr.pe.randy.showmethebusstop.data.entity.BusStationData
 import kr.pe.randy.showmethebusstop.presenter.KinContract
 import kr.pe.randy.showmethebusstop.presenter.KinPresenter
+import kr.pe.randy.showmethebusstop.view.adapter.KinListAdapter
 
 class KinFragment : Fragment(), KinContract.View {
     private lateinit var recyclerView: RecyclerView
     private lateinit var presenter: KinPresenter
+    private var addedStation: BusStationData? = null
+    private var removeStation: BusStationData? = null
 
-    private val onItemClick: (busStation: BusStation) -> Unit = { item ->
+    private val onItemClick: (busStation: BusStationData) -> Unit = { item ->
         (requireActivity() as MainActivity).handleSelectedBusStation(item, false)
     }
 
-    private val onDeleteIconClick: (busStation: BusStation) -> Unit = { item ->
+    private val onDeleteIconClick: (busStation: BusStationData) -> Unit = { item ->
         (requireActivity() as MainActivity).handleSelectedBusStation(item, true)
     }
 
@@ -35,7 +38,10 @@ class KinFragment : Fragment(), KinContract.View {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_favorite).apply {
-            adapter = KinListAdapter(onItemClick, onDeleteIconClick)
+            adapter = KinListAdapter(
+                onItemClick,
+                onDeleteIconClick
+            )
             addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
         }
         initPresenter()
@@ -51,12 +57,14 @@ class KinFragment : Fragment(), KinContract.View {
         presenter.takeView(this)
     }
 
-    fun addToFavorite(station: BusStation) {
-        presenter.addToFavorite(station)
+    fun addToFavorite(station: BusStationData, needNotify: Boolean) {
+        addedStation = station
+        presenter.addToFavorite(station, needNotify)
     }
 
-    fun removeFromFavorite(station: BusStation) {
-        presenter.removeFromFavorite(station)
+    fun removeFromFavorite(station: BusStationData, needNotify: Boolean) {
+        removeStation = station
+        presenter.removeFromFavorite(station, needNotify)
     }
 
     override fun getLifecycleOwner(): LifecycleOwner {
@@ -64,7 +72,7 @@ class KinFragment : Fragment(), KinContract.View {
     }
 
     // KinContract.View
-    override fun showFavorites(stationList : List<BusStation>) {
+    override fun showFavorites(stationList : List<BusStationData>) {
         (recyclerView.adapter as KinListAdapter).setEntries(stationList)
     }
 
@@ -75,6 +83,19 @@ class KinFragment : Fragment(), KinContract.View {
 
     // KinContract.View
     override fun notifyAdded() {
-        Snackbar.make(recyclerView, requireContext().getText(R.string.favorite_added), Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(recyclerView, requireContext().getText(R.string.favorite_added), Snackbar.LENGTH_SHORT).setAction(R.string.undo, ({
+            addedStation?.let {
+                removeFromFavorite(it, false)
+            }
+        })).show()
+    }
+
+    // KinContract.View
+    override fun notifyRemoved() {
+        Snackbar.make(recyclerView, requireContext().getText(R.string.favorite_removed), Snackbar.LENGTH_SHORT).setAction(R.string.undo, ({
+            removeStation?.let {
+                addToFavorite(it, false)
+            }
+        })).show()
     }
 }

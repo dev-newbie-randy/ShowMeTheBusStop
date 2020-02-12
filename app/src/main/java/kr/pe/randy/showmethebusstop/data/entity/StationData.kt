@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.model
+package kr.pe.randy.showmethebusstop.data.entity
 
 import org.simpleframework.xml.Element
 import org.simpleframework.xml.ElementList
@@ -29,11 +29,12 @@ class MsgHeader {
 @Root(name = "msgBody", strict = false)
 class MsgBody {
     @field:ElementList(inline = true, name = "itemList", required = false)
-    var busStationList = mutableListOf<BusStation>()
+    var busStationList = mutableListOf<BusStationData>()
 }
 
+
 @Root(name = "itemList", strict = false)
-data class BusStation(
+data class BusStationData(
     @field:Element(name = "arsId" , required = false)
     var mobileNo: String = "",
 

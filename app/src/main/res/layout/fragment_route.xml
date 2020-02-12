@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.BusRouteFragment">
+    tools:context=".view.fragment.BusRouteFragment">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/station"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toEndOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/recycler_view">
+        app:layout_constraintBottom_toTopOf="@+id/swipeContainer">
         <TextView
             android:id="@+id/station_name"
             android:layout_width="match_parent"
@@ -26,24 +26,29 @@
             tools:text="7호선 가산 디지털단지역"/>
     </androidx.cardview.widget.CardView>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:scrollbars="vertical"
-        android:scrollbarFadeDuration="3000"
-        android:fadeScrollbars="true"
-        android:orientation="vertical"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:layout_weight="1"
-        android:layout_gravity="end"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/route_item_row"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/station"/>
+        app:layout_constraintTop_toBottomOf="@id/station">
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:scrollbarFadeDuration="3000"
+            android:fadeScrollbars="true"
+            android:orientation="vertical"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:layout_weight="1"
+            android:layout_gravity="end"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/route_item_row" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

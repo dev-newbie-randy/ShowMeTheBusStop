@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.view
+package kr.pe.randy.showmethebusstop.view.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,13 +8,13 @@ import androidx.appcompat.widget.AppCompatImageButton
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.model.BusStation
+import kr.pe.randy.showmethebusstop.data.entity.BusStationData
 
-class KinListAdapter(private val onItemClick: (BusStation) -> Unit,
-    private val onDeleteIconClick: (BusStation) -> Unit)
+class KinListAdapter(private val onItemClick: (BusStationData) -> Unit,
+                     private val onDeleteIconClick: (BusStationData) -> Unit)
     : RecyclerView.Adapter<KinListAdapter.KinViewHolder>(){
 
-    private val items = mutableListOf<BusStation>()
+    private val items = mutableListOf<BusStationData>()
     private lateinit var rootView: View
 
     inner class KinViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -32,10 +32,10 @@ class KinListAdapter(private val onItemClick: (BusStation) -> Unit,
             }
         }
 
-        fun bind(data: BusStation) {
+        fun bind(data: BusStationData) {
             with(data) {
                 busStationName.text = stationName
-                busStationId.text = mobileNo
+                busStationId.text = convertId(mobileNo)
                 delete.isVisible = true
             }
         }
@@ -50,11 +50,18 @@ class KinListAdapter(private val onItemClick: (BusStation) -> Unit,
 
     override fun getItemCount() = items.size
 
-    fun setEntries(newList: List<BusStation>) {
+    fun setEntries(newList: List<BusStationData>) {
         synchronized(items) {
             items.clear()
             items.addAll(newList)
             notifyDataSetChanged()
         }
     }
+
+    private fun convertId(id: String): String = if ("0" == id) id else
+        StringBuilder()
+            .append(id.substring(0, 2))
+            .append('-')
+            .append(id.substring(2, id.length))
+            .toString()
 }

@@ -1,30 +1,40 @@
 package kr.pe.randy.showmethebusstop.presenter
 
-import kr.pe.randy.showmethebusstop.model.RouteApi
-import kr.pe.randy.showmethebusstop.model.RouteData
+import androidx.annotation.NonNull
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import kr.pe.randy.showmethebusstop.data.entity.RouteData
+import kr.pe.randy.showmethebusstop.data.remote.api.RouteApiService
+import kr.pe.randy.showmethebusstop.data.repository.RouteRepository
 
-class RoutePresenter : RouteContract.Presenter, RouteContract.Listener {
-    private var searchView : RouteContract.View? = null
+class RoutePresenter : RouteContract.Presenter, ViewModel() {
+    private var view : RouteContract.View? = null
+    private val repository = RouteRepository(RouteApiService.api)
+    private val _items = MutableLiveData<MutableList<RouteData>>()
 
     override fun takeView(view: RouteContract.View) {
-        searchView = view
-    }
-
-    override fun getRouteList(keyword: String) {
-        searchView?.getContextIfAvailable()?.let {
-            RouteApi.searchBusRoute(keyword, it, this@RoutePresenter)
+        this.view = view.apply {
+            _items.observe(getLifecycleOwner(), Observer { list ->
+                showRouteList(list)
+            })
         }
     }
 
     override fun dropView() {
-        searchView = null
+        view = null
     }
 
-    override fun onSuccess(list: List<RouteData>) {
-        searchView?.showRouteList(list)
-    }
-
-    override fun onFail(msg: String) {
-        searchView?.showError(msg)
+    override fun getRouteList(@NonNull stationId: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                val list = repository.fetchRouteList(stationId.trim())
+                _items.postValue(list)
+            }
+        }
     }
 }

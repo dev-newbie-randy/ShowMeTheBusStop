@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.KinFragment">
+    tools:context=".view.fragment.KinFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_favorite"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
         android:scrollbars="vertical"
         android:scrollbarFadeDuration="3000"
         android:fadeScrollbars="true"

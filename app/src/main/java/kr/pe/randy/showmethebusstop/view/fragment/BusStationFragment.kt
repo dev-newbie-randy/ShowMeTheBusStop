@@ -1,4 +1,4 @@
-package kr.pe.randy.showmethebusstop.view
+package kr.pe.randy.showmethebusstop.view.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,19 +7,21 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import kr.pe.randy.showmethebusstop.MainActivity
 import kr.pe.randy.showmethebusstop.R
-import kr.pe.randy.showmethebusstop.model.BusStation
+import kr.pe.randy.showmethebusstop.data.entity.BusStationData
 import kr.pe.randy.showmethebusstop.presenter.StationContract
 import kr.pe.randy.showmethebusstop.presenter.StationPresenter
+import kr.pe.randy.showmethebusstop.view.adapter.BusStationListAdapter
 
 class BusStationFragment : Fragment(), StationContract.View {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var noResultView: TextView
-    private lateinit var searchPresenter: StationPresenter
+    private lateinit var presenter: StationPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return LayoutInflater.from(context).inflate(R.layout.fragment_station, container, false)
@@ -42,17 +44,21 @@ class BusStationFragment : Fragment(), StationContract.View {
     }
 
     private fun initPresenter() {
-        searchPresenter = StationPresenter()
-        searchPresenter.takeView(this)
+        presenter = StationPresenter()
+        presenter.takeView(this)
     }
 
     fun searchStation(keyword: String) {
         noResultView.visibility = View.GONE
-        searchPresenter.getStationList(keyword)
+        presenter.getStationList(keyword)
+    }
+
+    override fun getLifecycleOwner(): LifecycleOwner {
+        return viewLifecycleOwner
     }
 
     // SearchContract.View
-    override fun showStationList(stationList : List<BusStation>) {
+    override fun showStationList(stationList : List<BusStationData>) {
         if (stationList.isEmpty()) {
             noResultView.visibility = View.VISIBLE
         }
@@ -64,7 +70,7 @@ class BusStationFragment : Fragment(), StationContract.View {
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
 
-    private fun onBusStationClick(data: BusStation) {
+    private fun onBusStationClick(data: BusStationData) {
         (activity as? MainActivity)?.handleSelectedBusStation(data)
     }
 }
