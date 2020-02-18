@@ -9,6 +9,9 @@
     <string name="actionbar_station">"      정류장을 검색해봐"</string>
     <string name="actionbar_route">"      정류장의 노선 정보란다"</string>
     <string name="actionbar_kin">"      이건 니가 즐찾한 정류장 리스트"</string>
-    <string name="favorite_added">"즐겨찾기에 추가되었습니다."</string>
+    <string name="favorite_added">"즐겨찾기에 추가됩니다."</string>
+    <string name="favorite_removed">"즐겨찾기에서 삭제됩니다."</string>
     <string name="favorite_already_exist">"이미 즐겨찾기된 정류장 입니다."</string>
+    <string name="exit">뒤로 버튼을 한번 더 누르면 종료됩니다.</string>
+    <string name="undo">"취소"</string>
 </resources>

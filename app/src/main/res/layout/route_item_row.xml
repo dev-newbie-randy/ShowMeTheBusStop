@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="3dp"
     android:background="?attr/selectableItemBackground"
-    tools:context=".view.BusRouteListAdapter">
+    tools:context=".view.adapter.BusRouteListAdapter">
 
 
     <Button
@@ -20,23 +20,39 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/row_name"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:singleLine="true"
         android:layout_marginTop="1dp"
         android:layout_marginStart="12dp"
         app:layout_constraintStart_toEndOf="@id/left_wall"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/row_current"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/row_type"
+        app:layout_constraintBottom_toTopOf="@id/row_direction"
         tools:text="75 부천"/>
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/row_type"
+        android:id="@+id/row_current"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="12dp"
+        android:gravity="end"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/row_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/row_direction"
+        tools:text="운행종료"/>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/row_direction"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:singleLine="true"
         android:textAlignment="textStart"
         android:layout_marginStart="12dp"
@@ -44,8 +60,24 @@
         app:layout_constraintStart_toEndOf="@id/left_wall"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/row_name"
+        app:layout_constraintBottom_toTopOf="@id/row_next"
+        tools:text="가산디지털단지역 방향"/>
+
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/row_next"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:singleLine="true"
+        android:textAlignment="textStart"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintStart_toEndOf="@id/left_wall"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/row_direction"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="일반형 시내버스"/>
+        tools:text="다음버스"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

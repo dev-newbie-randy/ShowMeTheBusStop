@@ -2,7 +2,7 @@ package kr.pe.randy.showmethebusstop
 
 import android.app.Application
 import androidx.room.Room
-import kr.pe.randy.showmethebusstop.model.data.FavoriteDatabase
+import kr.pe.randy.showmethebusstop.data.local.database.FavoriteDatabase
 
 class App : Application() {
     companion object {

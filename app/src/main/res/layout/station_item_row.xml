@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="3dp"
     android:background="?attr/selectableItemBackground"
-    tools:context=".view.BusStationListAdapter">
+    tools:context=".view.adapter.BusStationListAdapter">
 
     <Button
         android:id="@+id/left_wall"
@@ -21,7 +21,7 @@
         android:id="@+id/row_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="20sp"
         android:singleLine="true"
         android:layout_marginTop="1dp"
         android:layout_marginStart="12dp"
@@ -35,30 +35,15 @@
         android:id="@+id/row_id"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="12sp"
+        android:textSize="14sp"
         android:singleLine="true"
         android:textAlignment="textStart"
         android:layout_marginStart="12dp"
         app:layout_constraintStart_toEndOf="@+id/left_wall"
         app:layout_constraintEnd_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/row_name"
-        app:layout_constraintBottom_toTopOf="@+id/row_region"
-        tools:text="18999"/>
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/row_region"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:singleLine="true"
-        android:textAlignment="textStart"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="1dp"
-        app:layout_constraintStart_toEndOf="@+id/left_wall"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/row_id"
         app:layout_constraintBottom_toBottomOf="parent"
-        tools:text="서울"/>
+        tools:text="18999"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
