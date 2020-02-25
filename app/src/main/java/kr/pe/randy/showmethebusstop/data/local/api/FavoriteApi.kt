@@ -39,6 +39,15 @@ class FavoriteApi {
         return true
     }
 
+    suspend fun insertAll(stations: List<BusStationData>) {
+        val favorites = mutableListOf<FavoriteStation>()
+        for (station in stations) {
+            favorites.add(convertData(station))
+        }
+        val dao = dataBase.favoriteDao()
+        dao.insertAll(favorites)
+    }
+
     suspend fun deleteStation(station: BusStationData): Boolean {
         if (stationList.size == 0) {
             return false
@@ -46,6 +55,11 @@ class FavoriteApi {
         val dao = dataBase.favoriteDao()
         dao.delete(convertData(station))
         return true
+    }
+
+    suspend fun deleteAll() {
+        val dao = dataBase.favoriteDao()
+        dao.deleteAll()
     }
 
     suspend fun loadFavorites(): List<BusStationData> {

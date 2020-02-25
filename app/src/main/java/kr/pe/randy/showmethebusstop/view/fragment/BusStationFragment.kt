@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.widget.ContentLoadingProgressBar
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -18,43 +19,40 @@ import kr.pe.randy.showmethebusstop.presenter.StationPresenter
 import kr.pe.randy.showmethebusstop.view.adapter.BusStationListAdapter
 
 class BusStationFragment : Fragment(), StationContract.View {
+    private lateinit var fragmentView: View
 
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var noResultView: TextView
-    private lateinit var presenter: StationPresenter
+    private val recyclerView by lazy {
+        fragmentView.findViewById<RecyclerView>(R.id.recycler_view).apply {
+            adapter = BusStationListAdapter()
+                    .apply {
+                        onItemClick = {
+                            onBusStationClick(it)
+                        }
+                    }
+            addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
+        }
+    }
+
+    private val noResultView by lazy {
+        fragmentView.findViewById<TextView>(R.id.no_result)
+    }
+
+    private val presenter = StationPresenter()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return LayoutInflater.from(context).inflate(R.layout.fragment_station, container, false)
+        return LayoutInflater.from(context).inflate(R.layout.fragment_station, container, false).apply {
+            fragmentView = this
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view).apply {
-            adapter = BusStationListAdapter()
-                .apply {
-                onItemClick = {
-                    onBusStationClick(it)
-                }
-            }
-            addItemDecoration(DividerItemDecoration(activity, DividerItemDecoration.VERTICAL))
-        }
-
-        noResultView = view.findViewById(R.id.no_result)
-        initPresenter()
-    }
-
-    private fun initPresenter() {
-        presenter = StationPresenter()
         presenter.takeView(this)
     }
 
     fun searchStation(keyword: String) {
         noResultView.visibility = View.GONE
         presenter.getStationList(keyword)
-    }
-
-    override fun getLifecycleOwner(): LifecycleOwner {
-        return viewLifecycleOwner
     }
 
     // SearchContract.View
@@ -65,10 +63,22 @@ class BusStationFragment : Fragment(), StationContract.View {
         (recyclerView.adapter as BusStationListAdapter).setEntries(stationList)
     }
 
-    // SearchContract.View
+    override fun getLifecycleOwner(): LifecycleOwner {
+        return viewLifecycleOwner
+    }
+
     override fun showError(error : String) {
         Toast.makeText(requireContext(), error, Toast.LENGTH_SHORT).show()
     }
+
+    override fun showProgress() {
+        fragmentView.findViewById<ContentLoadingProgressBar>(R.id.progress).visibility = View.VISIBLE
+    }
+
+    override fun hideProgress() {
+        fragmentView.findViewById<ContentLoadingProgressBar>(R.id.progress).visibility = View.GONE
+    }
+    //
 
     private fun onBusStationClick(data: BusStationData) {
         (activity as? MainActivity)?.handleSelectedBusStation(data)

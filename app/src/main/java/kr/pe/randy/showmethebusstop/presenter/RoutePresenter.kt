@@ -31,10 +31,12 @@ class RoutePresenter : RouteContract.Presenter, ViewModel() {
 
     override fun getRouteList(@NonNull stationId: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            view?.showProgress()
+            withContext(Dispatchers.Default) {
                 val list = repository.fetchRouteList(stationId.trim())
                 _items.postValue(list)
             }
+            view?.hideProgress()
         }
     }
 }

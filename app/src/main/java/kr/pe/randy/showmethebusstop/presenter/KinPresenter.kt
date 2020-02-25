@@ -28,35 +28,47 @@ class KinPresenter: KinContract.Presenter, ViewModel() {
 
     override fun addToFavorite(station: BusStationData, needNotify: Boolean) {
         viewModelScope.launch {
+            view?.showProgress()
             withContext(Dispatchers.IO) {
                 repository.addToFavorite(station)
             }
-            withContext(Dispatchers.Main) {
-                if (needNotify) {
-                    view?.notifyAdded()
-                }
+            view?.hideProgress()
+            if (needNotify) {
+                view?.notifyAdded()
             }
         }
     }
 
     override fun removeFromFavorite(station: BusStationData, needNotify: Boolean) {
         viewModelScope.launch {
+            view?.showProgress()
             withContext(Dispatchers.IO) {
                 repository.removeFromFavorite(station)
             }
-            withContext(Dispatchers.Main) {
-                if (needNotify) {
-                    view?.notifyRemoved()
-                }
+            view?.hideProgress()
+            if (needNotify) {
+                view?.notifyRemoved()
             }
         }
     }
 
     override fun loadFavorites() {
         viewModelScope.launch {
+            view?.showProgress()
             withContext(Dispatchers.IO) {
                 repository.fetchFavoriteList()
             }
+            view?.hideProgress()
+        }
+    }
+
+    override fun reorderFavorites(stations: List<BusStationData>) {
+        viewModelScope.launch {
+            view?.showProgress()
+            withContext(Dispatchers.IO) {
+                repository.reorderFavorites(stations)
+            }
+            view?.hideProgress()
         }
     }
 }
