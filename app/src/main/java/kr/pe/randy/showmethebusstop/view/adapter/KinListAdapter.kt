@@ -1,6 +1,8 @@
 package kr.pe.randy.showmethebusstop.view.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,8 +13,9 @@ import kr.pe.randy.showmethebusstop.R
 import kr.pe.randy.showmethebusstop.data.entity.BusStationData
 
 class KinListAdapter(private val onItemClick: (BusStationData) -> Unit,
-                     private val onDeleteIconClick: (BusStationData) -> Unit)
-    : RecyclerView.Adapter<KinListAdapter.KinViewHolder>(){
+                     private val onDeleteIconClick: (BusStationData) -> Unit,
+                     private val listener: ItemDragListener)
+    : RecyclerView.Adapter<KinListAdapter.KinViewHolder>(), ItemActionListener {
 
     private val items = mutableListOf<BusStationData>()
     private lateinit var rootView: View
@@ -27,9 +30,21 @@ class KinListAdapter(private val onItemClick: (BusStationData) -> Unit,
                 onItemClick(items[adapterPosition])
             }
 
-            rootView.findViewById<AppCompatImageButton>(R.id.delete_button).setOnClickListener {
+            delete.setOnClickListener {
                 onDeleteIconClick(items[adapterPosition])
             }
+
+            view.setOnLongClickListener {
+                listener.onStartDrag(this)
+                false
+            }
+//
+//            view.setOnTouchListener { _, event ->
+//                if (event.action == MotionEvent.ACTION_DOWN) {
+//                    listener.onStartDrag(this)
+//                }
+//                false
+//            }
         }
 
         fun bind(data: BusStationData) {
@@ -47,6 +62,19 @@ class KinListAdapter(private val onItemClick: (BusStationData) -> Unit,
     }
 
     override fun onBindViewHolder(holder: KinViewHolder, pos: Int) =  holder.bind(items[pos])
+
+    override fun onItemMoved(from: Int, to: Int) {
+        if (from == to) {
+            return
+        }
+        val fromItem = items.removeAt(from)
+        items.add(to, fromItem)
+        notifyItemMoved(from, to)
+    }
+
+    override fun onTouchUp() {
+        listener.onEndDrag(items)
+    }
 
     override fun getItemCount() = items.size
 

@@ -31,10 +31,12 @@ class StationPresenter : StationContract.Presenter, ViewModel() {
 
     override fun getStationList(@NonNull keyword: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            view?.showProgress()
+            withContext(Dispatchers.Default) {
                 val list = repository.fetchStationList(keyword)
                 _items.postValue(list)
             }
+            view?.hideProgress()
         }
     }
 }

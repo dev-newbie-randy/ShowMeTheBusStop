@@ -42,4 +42,12 @@ class FavoriteRepository(private val database: RoomDatabase) {
             _items.postValue(api.loadFavorites())
         }
     }
+
+    @Transaction
+    suspend fun reorderFavorites(@NonNull stations: List<BusStationData>) {
+        database.withTransaction {
+            api.deleteAll()
+            api.insertAll(stations)
+        }
+    }
 }

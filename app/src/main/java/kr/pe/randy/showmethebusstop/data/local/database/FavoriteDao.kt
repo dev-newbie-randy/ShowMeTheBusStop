@@ -8,8 +8,14 @@ interface FavoriteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(vararg station: FavoriteStation)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(stations: List<FavoriteStation>)
+
     @Delete
     suspend fun delete(vararg station: FavoriteStation)
+
+    @Query("DELETE FROM favorite")
+    suspend fun deleteAll()
 
     @Query("SELECT * FROM favorite")
     suspend fun load(): List<FavoriteStation>

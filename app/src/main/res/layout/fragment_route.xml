@@ -6,6 +6,19 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.BusRouteFragment">
 
+    <androidx.core.widget.ContentLoadingProgressBar
+        android:id="@+id/progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintHorizontal_weight="0.5"
+        app:layout_constraintVertical_weight="0.5"
+        style="?android:attr/progressBarStyleLarge"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
     <androidx.cardview.widget.CardView
         android:id="@+id/station"
         android:layout_width="match_parent"
@@ -61,6 +74,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:fabSize="auto"
-        app:srcCompat="@drawable/baseline_stars_24"/>
+        app:srcCompat="@drawable/baseline_grade_24"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
